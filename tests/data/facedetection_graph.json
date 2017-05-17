@@ -1,0 +1,26 @@
+{
+	"cells": [
+		{
+			"name": "face_detection",
+			"module": "ecto.SBRE_cells",
+			"cell_type": "OKAOFaceDetection"
+		},
+		{
+			"name": "read_image",
+			"module": "ecto.highgui",
+			"cell_type": "imread"
+		}
+	],
+	"outputs":[
+		{
+			"cell_id":"face_detection",
+			"port_name":"faces"
+		}
+	],
+	"connections":[
+		{
+			"from":"read_image.image",
+			"to":"face_detection.image"
+		}
+	]
+}

@@ -1,0 +1,108 @@
+{
+	"cells": [
+		{
+			"name": "const1",
+			"module": "ecto.cells",
+			"cell_type": "Constant",
+			"params":[
+				{
+					"param_name":"value",
+					"values":[
+						true,
+						false
+					]
+				}
+			]
+		},
+		{
+			"name": "const2",
+			"module": "ecto.cells",
+			"cell_type": "Constant",
+			"params":[
+				{
+					"param_name":"value",
+					"values":[
+						true,
+						false
+					]
+				}
+			]
+		},
+		{
+			"name": "const3",
+			"module": "ecto.cells",
+			"cell_type": "Constant",
+			"params":[
+				{
+					"param_name":"value",
+					"values":[
+						true,
+						false
+					]
+				}
+			]
+		},
+		{
+			"name": "and1",
+			"module": "ecto.cells",
+			"cell_type": "And"
+		},
+		{
+			"name": "and2",
+			"module": "ecto.cells",
+			"cell_type": "And"
+		},
+		{
+			"name": "and3",
+			"module": "ecto.cells",
+			"cell_type": "And"
+		},
+		{
+			"name": "and4",
+			"module": "ecto.cells",
+			"cell_type": "And"
+		}
+	],
+	"inputs":[
+		{
+			"cell_id":"and1",
+			"port_name":"in1"
+		},
+		{
+			"cell_id":"and2",
+			"port_name":"in1"
+		}
+	],
+	"outputs":[
+		{
+			"cell_id":"and4",
+			"port_name":"out"
+		}
+	],
+	"connections":[
+		{
+			"from":"const1.out",
+			"to":"and1.in2"
+		},
+		{
+			"from":"const2.out",
+			"to":"and2.in2"
+		},
+		{
+			"from":"const3.out",
+			"to":"and4.in2"
+		},
+		{
+			"from":"and1.out",
+			"to":"and3.in1"
+		},
+		{
+			"from":"and2.out",
+			"to":"and3.in2"
+		},
+		{
+			"from":"and3.out",
+			"to":"and4.in1"
+		}
+	]
+}

@@ -1,0 +1,32 @@
+{
+	"cells":[
+		{
+			"module":"ecto.cells",
+			"cell_type":"Passthrough",
+			"name":"pt1"
+		},
+		{
+			"module":"ecto.cells",
+			"cell_type":"Passthrough",
+			"name":"pt2"
+		}
+	],
+	"inputs":[
+		{
+			"cell_id":"pt1",
+			"port_name":"in"
+		}
+	],
+	"outputs":[
+		{
+			"cell_id":"pt2",
+			"port_name":"out"
+		}
+	],
+	"connections":[
+		{
+			"from":"pt1.out",
+			"to":"pt2.in"
+		}
+	]
+}
