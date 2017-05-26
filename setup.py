@@ -52,9 +52,11 @@ setup(
     author_email = 'sambrose@softbankrobotics.com',
     packages = [
         'processing_pipe',
+        'processing_pipe.commands',
     ],
     install_requires = [
         "python-ecto >= 1.0a0"
     ],
     package_data={"processing_pipe":["VERSION"]},
+    scripts=['bin/processing_pipe'],
 )
