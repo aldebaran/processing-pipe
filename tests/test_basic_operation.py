@@ -180,7 +180,7 @@ def test_clear_inputs():
 
 	graph.addCell(cells.Constant("const1", value=True))
 	graph.addCell(cells.Constant("const2", value=True))
-	graph.clearInputs()
+	graph.clearGraphInputs()
 	with pytest.raises(IndexError) as excinfo:
 		graph.inputs = (True, True)
 	assert 'No input was set for graph' in str(excinfo.value)

@@ -328,7 +328,10 @@ class Graph(object):
       str(port_name)
     )
 
-  def clearInputs(self):
+  def clearGraphInputs(self):
+    """
+    Reset input ports to an empty list
+    """
     self._inputs_handler = Graph._InputHandler(self.cellList)
 
   def setSwitchingParameters(self, cell_id, param_name, values):
