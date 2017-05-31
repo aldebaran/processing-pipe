@@ -328,6 +328,12 @@ class Graph(object):
       str(port_name)
     )
 
+  def getGraphInputs(self):
+    """
+    Returns the list of all ports which are inputs of the graph
+    """
+    return self._inputs_handler._input_port_list
+
   def clearGraphInputs(self):
     """
     Reset input ports to an empty list

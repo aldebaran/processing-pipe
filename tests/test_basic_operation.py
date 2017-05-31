@@ -65,6 +65,7 @@ def test_set_graph_input():
 	graph.setPortAsGraphOutput("pt2","out")
 	graph.setPortAsGraphInput("pt","in")
 	graph.connect("pt", "out", "pt2", "in")
+	assert([("pt", "in")] == graph.getGraphInputs())
 	graph.input = 10
 	graph.run()
 	assert(10 == graph.output)
@@ -92,6 +93,7 @@ def test_set_several_inputs():
 	graph.addCell(cells.Passthrough("pt2"))
 	graph.setPortAsGraphInput("and","in1")
 	graph.setPortAsGraphInput("and","in2")
+	assert([("and", "in1"), ("and", "in2")] == graph.getGraphInputs())
 	graph.setPortAsGraphOutput("pt2","out")
 	graph.connect("and", "out", "pt2", "in")
 	graph.inputs[0] = False
