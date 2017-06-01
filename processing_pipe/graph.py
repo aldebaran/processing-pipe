@@ -229,15 +229,14 @@ class Graph(object):
       for graph_output_port in graph_description["outputs"]:
         g.setPortAsGraphOutput(**graph_output_port)
 
-    if not graph_description.has_key("connections"):
-      raise Exception("No connection was declared. Use 'connections' field to declare cell connections")
-    for graph_connection in graph_description["connections"]:
-      g.connect(
-        upstream_cell_name=graph_connection["from"].split(".")[0],
-        output_port=graph_connection["from"].split(".")[1],
-        downstream_cell_name=graph_connection["to"].split(".")[0],
-        input_port=graph_connection["to"].split(".")[1]
-      )
+    if graph_description.has_key("connections"):
+      for graph_connection in graph_description["connections"]:
+        g.connect(
+          upstream_cell_name=graph_connection["from"].split(".")[0],
+          output_port=graph_connection["from"].split(".")[1],
+          downstream_cell_name=graph_connection["to"].split(".")[0],
+          input_port=graph_connection["to"].split(".")[1]
+        )
 
     return g
 
@@ -269,41 +268,44 @@ class Graph(object):
     self._graph_output_buffer = []
     if len(self.plasm.cells())>0:
       self.sched = ecto.CustomSchedulerSBR(self.plasm)
-      # print self.sched.getDepthMap()
+      runner = self.sched.execute
       self._params_handler.initParamIteration(self.sched.getDepthMap())
-      cells_to_rerun = list()
+    elif len(self.cellList)>0:
+      _lonely_cell = self.cellList.values()[0]
+      runner = (lambda x: [cell.process() for cell in self.cellList.values()])
+      self._params_handler.initParamIteration({_lonely_cell.name():0})
+    else:
+      return
+    cells_to_rerun = list()
 
-      while True:
-        self.sched.execute(cells_to_rerun if len(cells_to_rerun)>0 else 1)
-        # print self._outputs
-        # print self.cellList
-        # print self.cellList[str(self._outputs[0][0])].outputs[str(self._outputs[0][1])]
-        computation_result = dict(
-          outputs=[
-            self.cellList[self._outputs[i][0]].outputs[self._outputs[i][1]] for i in range(len(self._outputs))
-          ],
-          inputs=self._inputs_handler.getCurrentInputCombination(),
-          params=self._params_handler.getCurrentParamCombination(),
+    while True:
+      runner(cells_to_rerun if len(cells_to_rerun)>0 else 1)
+      computation_result = dict(
+        outputs=[
+          self.cellList[self._outputs[i][0]].outputs[self._outputs[i][1]] for i in range(len(self._outputs))
+        ],
+        inputs=self._inputs_handler.getCurrentInputCombination(),
+        params=self._params_handler.getCurrentParamCombination(),
+      )
+      if len(self._outputs)>1:
+        self._graph_output_buffer.append(
+          tuple(computation_result["outputs"])
         )
-        if len(self._outputs)>1:
-          self._graph_output_buffer.append(
-            tuple(computation_result["outputs"])
-          )
-        elif len(self._outputs)==1:
-          self._graph_output_buffer.append(
-            computation_result["outputs"][0]
-          )
+      elif len(self._outputs)==1:
+        self._graph_output_buffer.append(
+          computation_result["outputs"][0]
+        )
 
-        self._graph_result_buffer.append(computation_result)
+      self._graph_result_buffer.append(computation_result)
+      try:
+        cells_to_rerun = self._params_handler.setNextParamCombination()
+      except StopIteration:
+        self._params_handler.reset()
+        cells_to_rerun = list()
         try:
-          cells_to_rerun = self._params_handler.setNextParamCombination()
-        except StopIteration:
-          self._params_handler.reset()
-          cells_to_rerun = list()
-          try:
-            self._inputs_handler.setNextInputCombination()
-          except IndexError:
-            break
+          self._inputs_handler.setNextInputCombination()
+        except IndexError:
+          break
 
   def setPortAsGraphOutput(self, cell_id, port_name):
     """

@@ -70,6 +70,29 @@ def test_set_graph_input():
 	graph.run()
 	assert(10 == graph.output)
 
+def test_set_graph_with_lonely_cell():
+	graph = Graph()
+	graph.addCell(cells.Passthrough("pt"))
+	graph.setPortAsGraphOutput("pt","out")
+	graph.setPortAsGraphInput("pt","in")
+	assert([("pt", "in")] == graph.getGraphInputs())
+	graph.input = 10
+	graph.run()
+	assert(10 == graph.output)
+
+def test_run_several_disconnected_cells():
+	graph = Graph()
+	graph.addCell(cells.Passthrough("pt"))
+	graph.addCell(cells.Passthrough("pt2"))
+	graph.setPortAsGraphOutput("pt","out")
+	graph.setPortAsGraphInput("pt","in")
+	graph.setPortAsGraphOutput("pt2","out")
+	graph.setPortAsGraphInput("pt2","in")
+	assert([("pt", "in"), ("pt2", "in")] == graph.getGraphInputs())
+	graph.inputs = (10, 20)
+	graph.run()
+	assert((10,20) == graph.output)
+
 def test_raise_if_no_input_set():
 	"""
 	Setting input when none was set should raise
