@@ -307,23 +307,27 @@ class Graph(object):
         except IndexError:
           break
 
-  def setPortAsGraphOutput(self, cell_id, port_name):
+  def setPortAsGraphOutput(self, cell_id, port_name, *args, **kwargs):
     """
     Sets an output of the graph
 
     :param cell_id: Id of the output cell
     :param port_name: Name of the port used as output
+    :param args: Other arguments (ignored)
+    :param kwargs: Other arguments (ignored)
     """
     self._outputs.append(
       (cell_id, str(port_name))
     )
 
-  def setPortAsGraphInput(self, cell_id, port_name):
+  def setPortAsGraphInput(self, cell_id, port_name, *args, **kwargs):
     """
     Sets an input of the graph
 
     :param cell_id: Id of the input cell
     :param port_name: Name of the port used as input
+    :param args: Other arguments (ignored)
+    :param kwargs: Other arguments (ignored)
     """
     self._inputs_handler.addInput(
       cell_id,
