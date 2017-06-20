@@ -1,0 +1,32 @@
+%YAML:1.0
+version: "1.0"
+calibration_time: "Tue Feb 16 13:50:50 2016"
+width: 1280
+height: 720
+flags: 0
+cameraMatrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: f
+   data: [ 6.98771484e+02, 0., 6.36836731e+02, 0., 7.01881714e+02,
+       3.63480896e+02, 0., 0., 1. ]
+distortion: !!opencv-matrix
+   rows: 1
+   cols: 5
+   dt: f
+   data: [ -1.55318573e-01, -3.94537719e-03, -1.11183955e-03,
+       -6.83207996e-04, 1.72003265e-02 ]
+rectificationMatrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: f
+   data: [ 9.95197892e-01, 5.90135828e-02, -7.80928582e-02,
+       -5.98047040e-02, 9.98179376e-01, -7.82882422e-03, 7.74886757e-02,
+       1.24615505e-02, 9.96915340e-01 ]
+projectionMatrix: !!opencv-matrix
+   rows: 3
+   cols: 4
+   dt: f
+   data: [ 5.76974670e+02, 0., 7.37688110e+02, 0., 0., 5.76974670e+02,
+       3.70691010e+02, 0., 0., 0., 1., 0. ]
+avg_reprojection_error: 8.3270812389663185e-01

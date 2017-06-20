@@ -1,0 +1,8 @@
+Content: {has_2D: false, has_3D: false, has_IR: false, has_STEREO: true, has_TF: true,
+  independent_data: false, is_rosbag: false}
+DataInfo:
+  StereoCalibration: {left: calibration_liov4689_left.yml, right: calibration_liov4689_right.yml}
+  robot_name: Huxley
+  robot_type: STEREO
+  stereo_lcam_location: stereo_%03d.png
+  tf_location: tf.json

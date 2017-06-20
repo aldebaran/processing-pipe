@@ -1,0 +1,23 @@
+{
+	"inputs":[
+		{
+			"cell_id":"fd",
+			"port_name":"image",
+			"qidata_type":"IMG_3D"
+		}
+	],
+	"cells":[
+		{
+			"module":"ecto.SBRE_cells",
+			"cell_type":"OKAOFaceDetection",
+			"name":"fd"
+		}
+	],
+	"outputs":[
+		{
+			"cell_id":"fd",
+			"port_name":"faces",
+			"qidata_type":"<Face>"
+		}
+	]
+}

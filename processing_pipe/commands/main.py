@@ -12,6 +12,9 @@ TOOLS_SUBCOMMANDS = []
 import run_commands
 TOOLS_SUBCOMMANDS.append([run_commands, "run"])
 
+import eval_commands
+TOOLS_SUBCOMMANDS.append([eval_commands, "eval"])
+
 def toolsParser():
 	parser = argparse.ArgumentParser(description=TOOLS_DESCRIPTION)
 	subparsers = parser.add_subparsers()
