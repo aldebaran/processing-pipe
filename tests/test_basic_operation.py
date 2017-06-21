@@ -282,6 +282,24 @@ def test_graph_results():
 			)
 		)
 
+	# Make sure a re-run clears result
+	graph.inputs = [
+		(True, True)
+	]
+	graph.run()
+
+	assert(len(graph.result) == 8)
+	for result in graph.result:
+		assert(
+			result["outputs"][0] == (
+				result["params"]["const1.value"]
+				and result["params"]["const2.value"]
+				and result["params"]["const3.value"]
+				and result["inputs"][0]
+				and result["inputs"][1]
+			)
+		)
+
 # def test_roll_over_parameters_optimized():
 # 	"""
 # 	If we set different possible values for parameters on different cells, it

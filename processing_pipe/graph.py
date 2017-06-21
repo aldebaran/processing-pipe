@@ -266,6 +266,7 @@ class Graph(object):
     Runs the graph with all parameter and input values given
     """
     self._graph_output_buffer = []
+    self._graph_result_buffer = []
     if len(self.plasm.cells())>0:
       self.sched = ecto.CustomSchedulerSBR(self.plasm)
       runner = self.sched.execute
