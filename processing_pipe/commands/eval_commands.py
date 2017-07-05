@@ -7,7 +7,7 @@ import glob
 # Third-party libraries
 import argparse
 from qidata import qidataset, qidatafile, DataType
-from ecto import highgui
+from ecto.opencv import highgui
 
 # Local modules
 from processing_pipe.graph import Graph

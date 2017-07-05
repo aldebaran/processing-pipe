@@ -2,7 +2,8 @@
 import pytest
 
 # Third-party libraries
-from ecto import cells, highgui
+from ecto import cells
+from ecto.opencv import highgui
 
 # Local modules
 import fixtures

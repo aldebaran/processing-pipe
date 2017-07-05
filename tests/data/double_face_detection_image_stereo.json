@@ -13,12 +13,12 @@
 			"name":"pt"
 		},
 		{
-			"module":"ecto.SBRE_cells",
+			"module":"ecto.vision_cells",
 			"cell_type":"OKAOFaceDetection",
 			"name":"fd1"
 		},
 		{
-			"module":"ecto.SBRE_cells",
+			"module":"ecto.vision_cells",
 			"cell_type":"OKAOFaceDetection",
 			"name":"fd2"
 		}

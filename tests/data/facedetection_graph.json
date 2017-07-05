@@ -2,12 +2,12 @@
 	"cells": [
 		{
 			"name": "face_detection",
-			"module": "ecto.SBRE_cells",
+			"module": "ecto.vision_cells",
 			"cell_type": "OKAOFaceDetection"
 		},
 		{
 			"name": "read_image",
-			"module": "ecto.highgui",
+			"module": "ecto.opencv.highgui",
 			"cell_type": "imread"
 		}
 	],

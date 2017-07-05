@@ -55,7 +55,7 @@ setup(
         'processing_pipe.commands',
     ],
     install_requires = [
-        "python-ecto >= 1.0a3",
+        "python-ecto >= 1.0a9",
         "qidata >= 0.3.3"
     ],
     package_data={"processing_pipe":["VERSION"]},
