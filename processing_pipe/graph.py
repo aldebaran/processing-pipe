@@ -1,6 +1,13 @@
+# -*- coding: utf-8 -*-
+
+# Standard libraries
 import sys
-import utils as tools
+
+# Third-party libraries
 import ecto
+
+# Local modules
+import utils as tools
 
 def write_only_property(func):
   return property(fset=func)
