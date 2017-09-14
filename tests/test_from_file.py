@@ -57,33 +57,4 @@ def test_create_parametrized_graph_from_file():
 			)
 		)
 
-def test_face_detection_graph():
-	graph = Graph.createFromDict(
-		loadJSONFile(
-			fixtures.sandboxed(
-				fixtures.FD_GRAPH
-			)
-		)
-	)
-	graph.setSwitchingParameters(
-		"read_image",
-		"image_file",
-		[
-			fixtures.sandboxed(
-				fixtures.IMAGE
-			)
-		]
-	)
 
-	graph.setSwitchingParameters(
-		"read_image",
-		"mode",
-		[
-			highgui.ImageMode.GRAYSCALE
-		]
-	)
-	assert(graph.size()==2)
-	graph.run()
-	assert(graph.output is not None)
-	detected_faces = graph.output
-	assert(len(detected_faces) == 1)
