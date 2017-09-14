@@ -85,7 +85,8 @@ class Graph(object):
 
 			:param depthDict: the association between cell's ID and there depth in the graph
 			"""
-			self.ordered_cells = self.parameter_storage.keys().sort(
+			self.ordered_cells = sorted(
+				self.parameter_storage.keys(),
 			    key=lambda x:graph_depth_map[x[0].name()],
 			    reverse = False
 			)
@@ -98,6 +99,7 @@ class Graph(object):
 			:param values: The list of value
 			"""
 			cell = self.cell_list[cell_id]
+			values = map(lambda x: str(x) if isinstance(x,unicode) else x, values)
 			self.parameter_storage[(cell, param_name)] = [values, 0]
 			setattr(cell.params, param_name, values[0])
 

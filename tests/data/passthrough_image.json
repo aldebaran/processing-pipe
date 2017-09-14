@@ -1,0 +1,42 @@
+{
+	"cells": [
+		{
+			"name": "opening",
+			"module": "ecto_opencv.highgui",
+			"cell_type": "imread",
+			"params": [
+				{
+					"param_name":"image_file",
+					"values": [
+						"tests/data/ryan.jpg"
+					]
+				},
+				{
+					"param_name":"mode",
+					"values": [
+						"ecto_opencv.highgui.ImageMode.GRAYSCALE"
+					]
+				}
+			]
+		},
+		{
+			"name": "save",
+			"module": "ecto_opencv.highgui",
+			"cell_type": "ImageSaver",
+			"params": [
+				{
+					"param_name":"filename_param",
+					"values": [
+						"/tmp/processing_pipe/ryan.png"
+					]
+				}
+			]
+		}
+	],
+	"connections":[
+		{
+			"from":"opening.image",
+			"to":"save.image"
+		}
+	]
+}
