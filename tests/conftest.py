@@ -17,6 +17,7 @@ import shutil
 
 import processing_pipe
 from processing_pipe.utils import loadJSONFile
+from processing_pipe.commands import run_command
 
 #[MODULE INFO]-----------------------------------------------------------------
 __author__ = "sambrose"
@@ -82,3 +83,7 @@ def parametrized_graph():
 @pytest.fixture(scope="session")
 def copy_image_graph():
 	return loadJSONFile(os.path.join(DATA_FOLDER,COPY_GRAPH))
+
+@pytest.fixture(scope="session")
+def run_command_parser():
+	return run_command.make_command_parser()

@@ -43,13 +43,15 @@ setup(
     keywords = 'qidata test benchmark',
     author = 'Surya AMBROSE <sambrose@softbankrobotics.com>, Arnaud DUHAMEL <arnaud.duhamel@external.softbankrobotics.com>',
     author_email = 'sambrose@softbankrobotics.com',
-    packages = [
-        'processing_pipe',
-        'processing_pipe.commands',
-    ],
+    packages = package_list,
     install_requires = [
-        "python-ecto >= 1.0.0",
+        "python-ecto >= 1.0.1",
         "qidata >= 1.0.0a10"
     ],
     package_data={"processing_pipe":["VERSION"]},
+    entry_points={
+        'processing.commands': [
+            'run = processing_pipe.commands.run_command',
+        ],
+    }
 )
