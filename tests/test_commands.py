@@ -5,6 +5,19 @@ import pytest
 # Third-party libraries
 import argparse
 
+# Local modules
+from processing_pipe.__main__ import main
+
+def test_main_call():
+	with pytest.raises(SystemExit) as _s:
+		main(["-h"])
+	assert(0 == _s.value.code)
+
+def test_main_parser(main_command_parser):
+	with pytest.raises(SystemExit) as _s:
+		parsed_arguments = main_command_parser.parse_args(["-h"])
+	assert(0 == _s.value.code)
+
 @pytest.mark.parametrize("command_args",
 	[
 		[
@@ -14,8 +27,9 @@ import argparse
 )
 def test_failing_run_command(command_args, run_command_parser):
 	parsed_arguments = run_command_parser.parse_args(command_args)
-	with pytest.raises(SystemExit):
+	with pytest.raises(SystemExit) as _s:
 		parsed_arguments.func(parsed_arguments)
+	assert(0 != _s.value.code)
 
 @pytest.mark.parametrize("command_args",
                           [

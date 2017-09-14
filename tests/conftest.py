@@ -17,7 +17,7 @@ import shutil
 
 import processing_pipe
 from processing_pipe.utils import loadJSONFile
-from processing_pipe.commands import run_command
+from processing_pipe.commands import run_command, main
 
 #[MODULE INFO]-----------------------------------------------------------------
 __author__ = "sambrose"
@@ -87,3 +87,7 @@ def copy_image_graph():
 @pytest.fixture(scope="session")
 def run_command_parser():
 	return run_command.make_command_parser()
+
+@pytest.fixture(scope="session")
+def main_command_parser():
+	return main.parser()
