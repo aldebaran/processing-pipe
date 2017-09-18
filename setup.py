@@ -51,6 +51,7 @@ setup(
     package_data={"processing_pipe":["VERSION"]},
     entry_points={
         'processing.commands': [
+            'eval = processing_pipe.commands.eval_command',
             'run = processing_pipe.commands.run_command',
         ],
     }

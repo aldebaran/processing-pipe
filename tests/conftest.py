@@ -17,7 +17,7 @@ import shutil
 
 import processing_pipe
 from processing_pipe.utils import loadJSONFile
-from processing_pipe.commands import run_command, main
+from processing_pipe.commands import run_command, eval_command, main
 
 #[MODULE INFO]-----------------------------------------------------------------
 __author__ = "sambrose"
@@ -35,6 +35,7 @@ SANDBOX_FOLDER = "/tmp/processing_pipe/"
 GRAPH         = "simple_graph.json"
 COPY_GRAPH    = "passthrough_image.json"
 PARAM_GRAPH   = "parametrized_graph.json"
+DUMMY_GRAPH   = "dummy_graph_for_eval.json"
 IMAGE         = "ryan.jpg"
 
 #[MODULE CONTENT]--------------------------------------------------------------
@@ -81,12 +82,20 @@ def parametrized_graph():
 	return loadJSONFile(os.path.join(DATA_FOLDER,PARAM_GRAPH))
 
 @pytest.fixture(scope="session")
+def dummy_eval_graph():
+	return loadJSONFile(os.path.join(DATA_FOLDER,DUMMY_GRAPH))
+
+@pytest.fixture(scope="session")
 def copy_image_graph():
 	return loadJSONFile(os.path.join(DATA_FOLDER,COPY_GRAPH))
 
 @pytest.fixture(scope="session")
 def run_command_parser():
 	return run_command.make_command_parser()
+
+@pytest.fixture(scope="session")
+def eval_command_parser():
+	return eval_command.make_command_parser()
 
 @pytest.fixture(scope="session")
 def main_command_parser():
