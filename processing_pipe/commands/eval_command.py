@@ -463,6 +463,9 @@ def evaluateOnStreams(output_descriptions, results, qidataset, streams, start_ts
 	return evaluation
 
 def evalAlgorithm(args):
+	# Prepare resulting evaluation dictionnary
+	eval_res = dict()
+
 	# Test data has been given in arguments
 	input_datasets = glob.glob(args.input_dataset)
 	input_datafiles = glob.glob(args.input_datafile)
@@ -530,21 +533,23 @@ def evalAlgorithm(args):
 
 		results, processing_time = runOnStreams(graph, sorted(streams), start_ts)
 
-		return evaluateOnStreams(outputs_description,
-		                  results,
-		                  input_dataset,
-		                  streams,
-		                  start_ts,
-		                  processing_time)
+		eval_res[input_dataset] = evaluateOnStreams(outputs_description,
+		                                            results,
+		                                            input_dataset,
+		                                            streams,
+		                                            start_ts,
+		                                            processing_time)
 
 	if len(valid_input_datafiles) > 0:
 		processing_time = runOnFiles(graph, valid_input_datafiles)
 
 		# Evaluate results
-		return evaluateOnFiles(outputs_description,
-		                       graph.result,
-		                       valid_input_datafiles,
-		                       processing_time)
+		eval_res["_free_files_"] = evaluateOnFiles(outputs_description,
+		                                           graph.result,
+		                                           valid_input_datafiles,
+		                                           processing_time)
+
+	return eval_res
 
 # ──────
 # Parser

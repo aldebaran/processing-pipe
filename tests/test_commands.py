@@ -108,37 +108,39 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
         "tests/data/dummy_graph_for_eval.json"
       ],
       {
-        "pt.out":dict(
-          jdoe=[
-            dict(fdr=(1,2), sensitivity=(1,1)),
-            dict(fdr=(0,1), sensitivity=(1,1))
-          ],
-          jsmith=[
-            dict(fdr=(1,2), sensitivity=(1,1)),
-            dict(fdr=(0,1), sensitivity=(1,1)),
-          ]
-        ),
-        "pt.out.age":dict(
-          jdoe=[
-            dict(fdr=(1,2), sensitivity=(1,1)),
-            dict(fdr=(0,1), sensitivity=(1,1))
-          ],
-          jsmith=[
-            dict(fdr=(1,2), sensitivity=(1,1)),
-            dict(fdr=(0,1), sensitivity=(1,1)),
-          ]
-        ),
-        "count.count":dict(
-          jdoe=[
-            dict(fdr=(0,1), sensitivity=(1,1)),
-            dict(fdr=(0,1), sensitivity=(1,1))
-          ],
-          jsmith=[
-            dict(fdr=(0,1), sensitivity=(1,1)),
-            dict(fdr=(0,1), sensitivity=(1,1))
-          ]
-        ),
-        "pt2.out":dict()
+        "_free_files_":{
+          "pt.out":dict(
+            jdoe=[
+              dict(fdr=(1,2), sensitivity=(1,1)),
+              dict(fdr=(0,1), sensitivity=(1,1))
+            ],
+            jsmith=[
+              dict(fdr=(1,2), sensitivity=(1,1)),
+             dict(fdr=(0,1), sensitivity=(1,1)),
+            ]
+          ),
+          "pt.out.age":dict(
+            jdoe=[
+              dict(fdr=(1,2), sensitivity=(1,1)),
+              dict(fdr=(0,1), sensitivity=(1,1))
+            ],
+            jsmith=[
+              dict(fdr=(1,2), sensitivity=(1,1)),
+              dict(fdr=(0,1), sensitivity=(1,1)),
+            ]
+          ),
+          "count.count":dict(
+            jdoe=[
+              dict(fdr=(0,1), sensitivity=(1,1)),
+              dict(fdr=(0,1), sensitivity=(1,1))
+            ],
+            jsmith=[
+              dict(fdr=(0,1), sensitivity=(1,1)),
+              dict(fdr=(0,1), sensitivity=(1,1))
+            ]
+          ),
+          "pt2.out":dict()
+        }
       }
     ),
     (
@@ -148,15 +150,17 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
         "tests/data/dummy_graph_for_eval.json"
       ],
       {
-        "pt.out":dict(),
-        "pt.out.age":dict(),
-        "count.count":dict(),
-        "pt2.out":dict(
-          sambrose=[
-            dict(fdr=(152,182), sensitivity=(30,30)),
-            dict(fdr=(61,91), sensitivity=(30,30))
-          ]
-        )
+        "tests/data/gjacob_qidataset":{
+          "pt.out":dict(),
+          "pt.out.age":dict(),
+          "count.count":dict(),
+          "pt2.out":dict(
+              sambrose=[
+                dict(fdr=(152,182), sensitivity=(30,30)),
+                dict(fdr=(61,91), sensitivity=(30,30))
+            ]
+          )
+        }
       }
     ),
     (
@@ -166,39 +170,43 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
         "tests/data/dummy_graph_for_eval_2.json"
       ],
       {
-        "pt.out":dict(
-          sambrose=[
-            dict(fdr=(302,362), sensitivity=(60,60)),
-            dict(fdr=(121,181), sensitivity=(60,60))
-          ]
-        ),
-        "pt.out.name":dict(
-          sambrose=[
-            dict(fdr=(362,362), sensitivity=(0,60)),
-            dict(fdr=(181,181), sensitivity=(0,60))
-          ]
-        ),
-        "count.count":dict(
-          sambrose=[
-            dict(fdr=(121,181), sensitivity=(60,60)),
-            dict(fdr=(121,181), sensitivity=(60,60))
-          ]
-        ),
-        "pt2.out":dict(
-          sambrose=[
-            dict(fdr=(302,362), sensitivity=(60,60)),
-            dict(fdr=(121,181), sensitivity=(60,60))
-          ]
-        )
+        "tests/data/gjacob_qidataset":{
+          "pt.out":dict(
+            sambrose=[
+              dict(fdr=(302,362), sensitivity=(60,60)),
+              dict(fdr=(121,181), sensitivity=(60,60))
+            ]
+          ),
+          "pt.out.name":dict(
+            sambrose=[
+              dict(fdr=(362,362), sensitivity=(0,60)),
+              dict(fdr=(181,181), sensitivity=(0,60))
+            ]
+          ),
+          "count.count":dict(
+            sambrose=[
+              dict(fdr=(121,181), sensitivity=(60,60)),
+              dict(fdr=(121,181), sensitivity=(60,60))
+            ]
+          ),
+          "pt2.out":dict(
+            sambrose=[
+              dict(fdr=(302,362), sensitivity=(60,60)),
+              dict(fdr=(121,181), sensitivity=(60,60))
+            ]
+          )
+        }
       }
     ),
   ]
 )
 def test_eval_command(command_args, expected, eval_command_parser):
 	parsed_arguments = eval_command_parser.parse_args(command_args)
-	res = parsed_arguments.func(parsed_arguments)
-	assert(res.has_key("_time_"))
-	t = res.pop("_time_")
-	assert(isinstance(t, float))
-	assert(0 < t)
-	assert(expected == res)
+	results = parsed_arguments.func(parsed_arguments)
+	for res in results.values():
+		assert(res.has_key("_time_"))
+		t = res.pop("_time_")
+		assert(isinstance(t, float))
+		assert(0 < t)
+	assert(expected == results)
+
