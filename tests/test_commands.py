@@ -139,4 +139,8 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
 def test_eval_command(command_args, expected, eval_command_parser):
 	parsed_arguments = eval_command_parser.parse_args(command_args)
 	res = parsed_arguments.func(parsed_arguments)
+	assert(res.has_key("_time_"))
+	t = res.pop("_time_")
+	assert(isinstance(t, float))
+	assert(0 < t)
 	assert(expected == res)

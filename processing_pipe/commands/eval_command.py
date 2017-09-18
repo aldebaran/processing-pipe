@@ -4,6 +4,7 @@
 import copy
 import glob
 import os
+import time
 from warnings import warn
 
 # Third-party libraries
@@ -180,12 +181,16 @@ def run(graph, input_files):
 	)
 
 	# Run !
+	start = time.time()
 	graph.run()
+	return time.time() - start
 
-def evaluate(output_descriptions, results, inputs):
+def evaluate(output_descriptions, results, inputs, proc_time):
 
 	run_per_file = len(results) / len(inputs)
+	mean_execution_time = proc_time / len(results)
 	evaluation = dict()
+	evaluation["_time_"]=mean_execution_time
 
 	for output_desc in output_descriptions:
 		if output_desc is None: continue
@@ -225,6 +230,7 @@ def evaluate(output_descriptions, results, inputs):
 					out_description.false_positives[annotator][i] += res[1]
 					out_description.false_negatives[annotator][i] += res[2]
 
+	print "Mean execution time: %f s"%evaluation["_time_"]
 	for output_desc in output_descriptions:
 		if output_desc is None: continue
 		evaluation[output_desc.name] = dict()
@@ -300,11 +306,14 @@ def evalAlgorithm(args):
 	graph = initEvaluationGraph(graph_description)
 
 	# Run the graph
-	run(graph, valid_input_datafiles)
+	processing_time = run(graph, valid_input_datafiles)
 
 
 	# Evaluate results
-	return evaluate(outputs_description, graph.result, valid_input_datafiles)
+	return evaluate(outputs_description,
+	                graph.result,
+	                valid_input_datafiles,
+	                processing_time)
 
 # ───────
 # Helpers
