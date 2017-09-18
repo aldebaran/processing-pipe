@@ -57,7 +57,6 @@ class OutputDescription:
 		# Get annotation location property
 		self.annot_location = description.get("location", "None")
 
-
 def compare(annotations, outputs, output_desc):
 	annotations = copy.deepcopy(annotations)
 	res = [0,0,0,0]
@@ -101,7 +100,8 @@ def validateInputFiles(input_datafiles, input_description, outputs_description):
 	try:
 		while 1:
 			input_qidatafile = input_datafiles.pop(0)
-			# Check if file contains annotation for outputs #
+			# Check if file contains annotation for outputs
+			# and required input datatype
 			try:
 				with qidata.open(input_qidatafile, "r") as _f:
 					metadata = _f.annotations
@@ -172,12 +172,12 @@ def initEvaluationGraph(graph_description):
 
 	return graph
 
-def run(graph, input_files):
+def runOnFiles(graph, input_files):
 	# Set graph inputs
 	graph.setSwitchingParameters(
-		"input_provider_0",
-		"image_file",
-		input_files
+	    "input_provider_0",
+	    "image_file",
+	    input_files
 	)
 
 	# Run !
@@ -185,7 +185,7 @@ def run(graph, input_files):
 	graph.run()
 	return time.time() - start
 
-def evaluate(output_descriptions, results, inputs, proc_time):
+def evaluateOnFiles(output_descriptions, results, inputs, proc_time):
 
 	run_per_file = len(results) / len(inputs)
 	mean_execution_time = proc_time / len(results)
@@ -224,7 +224,10 @@ def evaluate(output_descriptions, results, inputs, proc_time):
 					graph_output = [graph_output]
 
 				for annotator in annotators[out_description]:
-					annotation_list = annotations[annotator][out_description.metadata_type]
+					try:
+						annotation_list = annotations[annotator][out_description.metadata_type]
+					except KeyError:
+						annotation_list = []
 					res = compare(annotation_list, graph_output, out_description)
 					out_description.true_positives[annotator][i] += res[0]
 					out_description.false_positives[annotator][i] += res[1]
@@ -306,21 +309,16 @@ def evalAlgorithm(args):
 	graph = initEvaluationGraph(graph_description)
 
 	# Run the graph
-	processing_time = run(graph, valid_input_datafiles)
 
 
-	# Evaluate results
-	return evaluate(outputs_description,
-	                graph.result,
-	                valid_input_datafiles,
-	                processing_time)
+	if len(valid_input_datafiles) > 0:
+		processing_time = runOnFiles(graph, valid_input_datafiles)
 
-# ───────
-# Helpers
-
-def throwIfAbsent(path):
-	if not os.path.exists(path):
-		sys.exit(path+" doesn't exist")
+		# Evaluate results
+		return evaluateOnFiles(outputs_description,
+		                       graph.result,
+		                       valid_input_datafiles,
+		                       processing_time)
 
 # ──────
 # Parser
