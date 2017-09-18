@@ -1,0 +1,79 @@
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Exempi + XMP Core 5.1.2">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about=""
+    xmlns:qidatasensor="http://softbank-robotics.com/qidatasensor/1">
+   <qidatasensor:data_type>IMAGE_3D</qidatasensor:data_type>
+   <qidatasensor:transform rdf:parseType="Resource">
+    <qidatasensor:translation rdf:parseType="Resource">
+     <qidatasensor:x>0.0457957873546</qidatasensor:x>
+     <qidatasensor:y>0.0387456125592</qidatasensor:y>
+     <qidatasensor:z>1.04715704675</qidatasensor:z>
+    </qidatasensor:translation>
+    <qidatasensor:rotation rdf:parseType="Resource">
+     <qidatasensor:x>-0.47193388873</qidatasensor:x>
+     <qidatasensor:y>0.469173112571</qidatasensor:y>
+     <qidatasensor:z>-0.519429928921</qidatasensor:z>
+     <qidatasensor:w>0.53604807998</qidatasensor:w>
+    </qidatasensor:rotation>
+   </qidatasensor:transform>
+   <qidatasensor:timestamp rdf:parseType="Resource">
+    <qidatasensor:seconds>1458813630</qidatasensor:seconds>
+    <qidatasensor:nanoseconds>74854922</qidatasensor:nanoseconds>
+   </qidatasensor:timestamp>
+  </rdf:Description>
+  <rdf:Description rdf:about=""
+    xmlns:qidata="http://softbank-robotics.com/qidata/1">
+   <qidata:sambrose rdf:parseType="Resource">
+    <qidata:Person>
+     <rdf:Seq>
+      <rdf:li rdf:parseType="Resource">
+       <qidata:info rdf:parseType="Resource">
+        <qidata:name>gjacob</qidata:name>
+        <qidata:version>0.2</qidata:version>
+       </qidata:info>
+       <qidata:location>
+        <rdf:Seq>
+         <rdf:li>
+          <rdf:Seq>
+           <rdf:li>271</rdf:li>
+           <rdf:li>18</rdf:li>
+          </rdf:Seq>
+         </rdf:li>
+         <rdf:li>
+          <rdf:Seq>
+           <rdf:li>321</rdf:li>
+           <rdf:li>228</rdf:li>
+          </rdf:Seq>
+         </rdf:li>
+        </rdf:Seq>
+       </qidata:location>
+      </rdf:li>
+     </rdf:Seq>
+    </qidata:Person>
+   </qidata:sambrose>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?>

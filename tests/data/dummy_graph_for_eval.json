@@ -28,12 +28,21 @@
 			"module":"ecto.cells",
 			"cell_type":"Passthrough",
 			"name":"pt"
+		},
+		{
+			"module":"ecto.cells",
+			"cell_type":"Passthrough",
+			"name":"pt2"
 		}
 	],
 	"connections":[
 		{
 			"from":"const.out",
 			"to":"pt.in"
+		},
+		{
+			"from":"const.out",
+			"to":"pt2.in"
 		}
 	],
 	"outputs":[
@@ -59,6 +68,12 @@
 			"cell_id":"count",
 			"port_name":"count",
 			"qidata_type":"Face",
+			"location":"None"
+		},
+		{
+			"cell_id":"pt2",
+			"port_name":"out",
+			"qidata_type":"<Person>",
 			"location":"None"
 		}
 	]

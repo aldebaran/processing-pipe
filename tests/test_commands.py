@@ -137,6 +137,25 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
             dict(fdr=(0,1), sensitivity=(1,1)),
             dict(fdr=(0,1), sensitivity=(1,1))
           ]
+        ),
+        "pt2.out":dict()
+      }
+    ),
+    (
+      [
+        "--input-dataset",
+        "tests/data/gjacob_*",
+        "tests/data/dummy_graph_for_eval.json"
+      ],
+      {
+        "pt.out":dict(),
+        "pt.out.age":dict(),
+        "count.count":dict(),
+        "pt2.out":dict(
+          sambrose=[
+            dict(fdr=(152,182), sensitivity=(30,30)),
+            dict(fdr=(61,91), sensitivity=(30,30))
+          ]
         )
       }
     ),
