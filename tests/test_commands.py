@@ -159,6 +159,39 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
         )
       }
     ),
+    (
+      [
+        "--input-dataset",
+        "tests/data/gjacob_*",
+        "tests/data/dummy_graph_for_eval_2.json"
+      ],
+      {
+        "pt.out":dict(
+          sambrose=[
+            dict(fdr=(302,362), sensitivity=(60,60)),
+            dict(fdr=(121,181), sensitivity=(60,60))
+          ]
+        ),
+        "pt.out.name":dict(
+          sambrose=[
+            dict(fdr=(362,362), sensitivity=(0,60)),
+            dict(fdr=(181,181), sensitivity=(0,60))
+          ]
+        ),
+        "count.count":dict(
+          sambrose=[
+            dict(fdr=(121,181), sensitivity=(60,60)),
+            dict(fdr=(121,181), sensitivity=(60,60))
+          ]
+        ),
+        "pt2.out":dict(
+          sambrose=[
+            dict(fdr=(302,362), sensitivity=(60,60)),
+            dict(fdr=(121,181), sensitivity=(60,60))
+          ]
+        )
+      }
+    ),
   ]
 )
 def test_eval_command(command_args, expected, eval_command_parser):

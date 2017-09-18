@@ -54,6 +54,9 @@ class OutputDescription:
 				self.compare_function =\
 				   lambda x,y: getattr(x,self.property_name_to_test)>=y-description["epsilon"]\
 				                 and getattr(x,self.property_name_to_test)<=y+description["epsilon"]
+			else:
+				self.compare_function =\
+				   lambda x,y: getattr(x,self.property_name_to_test)==y
 
 		# Get annotation location property
 		self.annot_location = description.get("location", "None")
