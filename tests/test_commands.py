@@ -10,10 +10,16 @@ from processing_pipe.__main__ import main
 
 def test_main_call():
 	with pytest.raises(SystemExit) as _s:
+		main(["-v"])
+	assert(0 == _s.value.code)
+	with pytest.raises(SystemExit) as _s:
 		main(["-h"])
 	assert(0 == _s.value.code)
 	with pytest.raises(SystemExit) as _s:
-		main(["-v"])
+		main(["run", "-h"])
+	assert(0 == _s.value.code)
+	with pytest.raises(SystemExit) as _s:
+		main(["eval", "-h"])
 	assert(0 == _s.value.code)
 
 def test_main_parser(main_command_parser):
