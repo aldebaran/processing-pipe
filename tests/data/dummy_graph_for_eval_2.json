@@ -60,13 +60,19 @@
 		{
 			"cell_id":"pt",
 			"port_name":"out",
-			"qidata_type":"<Person>"
+			"qidata_type":"<Person>",
+			"compare":[
+				["","","True"],
+				["attr:name","",""]
+			]
 		},
 		{
 			"cell_id":"pt",
 			"port_name":"out",
-			"location":"None",
-			"qidata_type":"<Person.name>"
+			"qidata_type":"<Person>",
+			"compare":[
+				["","","True"]
+			]
 		},
 		{
 			"cell_id":"count",
@@ -77,8 +83,7 @@
 		{
 			"cell_id":"pt2",
 			"port_name":"out",
-			"qidata_type":"<Person>",
-			"location":"None"
+			"qidata_type":"<Person>"
 		}
 	]
 }

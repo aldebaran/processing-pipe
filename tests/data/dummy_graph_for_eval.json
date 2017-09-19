@@ -20,7 +20,7 @@
 			"params":[
 				{
 					"param_name":"value",
-					"values":[[15, 34], [32]]
+					"values":[[[15], [34]], [[32]]]
 				}
 			]
 		},
@@ -55,9 +55,12 @@
 		{
 			"cell_id":"pt",
 			"port_name":"out",
+			"qidata_type":"<Face>",
 			"location":"None",
-			"qidata_type":"<Face.age>",
-			"epsilon":8
+			"compare":[
+				["","","True"],
+				["attr:age","item:0","Loose:8"]
+			]
 		},
 		{
 			"cell_id":"count",

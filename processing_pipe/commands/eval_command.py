@@ -20,13 +20,86 @@ from processing_pipe.utils import loadJSONFile
 
 DESCRIPTION = "Evaluate a given processing graph"
 
+def createComparator(comparison_rule):
+	# Create comparator
+	if "" == comparison_rule[0]:
+		default_comparison = "True"
+		def get_annotation(x):
+			return x
+	else:
+		annotation_prop_type, annotation_prop_name=comparison_rule[0].split(":")
+		default_comparison = "Strict"
+		if "attr" == annotation_prop_type:
+			def get_annotation(x):
+				return getattr(x,annotation_prop_name)
+		elif "key" == annotation_prop_type:
+			def get_annotation(x):
+				return x[annotation_prop_name]
+		elif "item" == annotation_prop_type:
+			def get_annotation(x):
+				return x[int(annotation_prop_name)]
+
+	if "" == comparison_rule[1]:
+		def get_output(y):
+			return y
+	else:
+		output_prop_type, output_prop_name=comparison_rule[1].split(":")
+		if "attr" == output_prop_type:
+			def get_output(y):
+				return getattr(y,output_prop_name)
+
+		elif "key" == output_prop_type:
+			def get_output(y):
+				return y[output_prop_name]
+
+		elif "item" == output_prop_type:
+			def get_output(y):
+				return y[int(output_prop_name)]
+
+	comparison_details = (default_comparison\
+	                         if "" == comparison_rule[2]\
+	                         else comparison_rule[2]).split(":")
+
+
+	if "True" == comparison_details[0]:
+		return lambda x,y: True
+
+	elif "Strict" == comparison_details[0]:
+		return lambda x,y: get_annotation(x) == get_output(y)
+
+	elif "Loose" == comparison_details[0]:
+		try:
+			comparison_param = float(comparison_details[1])
+		except KeyError:
+			warn("An additional parameter is necessary when using \"Loose\" comparison")
+			raise
+		except ValueError:
+			warn("Only numbers can be used as parameters for \"Loose\" comparison")
+			raise
+		return lambda x,y: get_annotation(x) >= get_output(y)-comparison_param\
+		                   and get_annotation(x) <= get_output(y)+comparison_param
+	else:
+		raise Exception("Unsupported comparison mode %s"%comparison_type)
+
+def specifyName(basetype, comparison_rule):
+	if "" == comparison_rule[0]:
+		return ""
+	else:
+		a, b=comparison_rule[0].split(":")
+		if "attr" == a:
+			return "%s.%s"%(basetype,b)
+		elif "key" == a:
+			return "%s[%s]"%(basetype,b)
+		elif "item" == a:
+			return "%s[%d])"%(basetype,int(b))
+
 class OutputDescription:
 	is_list = False
 	metadata_type = None
 	property_name_to_test = None
 	comparison_function = None
 
-	def __init__(self, description):
+	def __init__(self, description, comparison_rules):
 		self.true_positives = dict()
 		self.false_negatives = dict()
 		self.false_positives = dict()
@@ -39,44 +112,41 @@ class OutputDescription:
 			description["qidata_type"] = description["qidata_type"][1:-1]
 
 		# Generate name
-		self.name = "%s.%s"%(description["cell_id"], description["port_name"])
+		self.name = "%s.%s(%s"%(description["cell_id"],
+		                        description["port_name"],
+		                        description["qidata_type"])
+
+		self.name += specifyName(description["qidata_type"], comparison_rules[0])
+		for i in comparison_rules[1:]:
+			self.name += "&"+specifyName(description["qidata_type"], i)
+		self.name += ")"
 
 		# Get output type
-		_tmp = description["qidata_type"].split(".")
-		self.metadata_type = _tmp[0]
+		self.metadata_type = description["qidata_type"]
 
-		# Find if there is a specific property to test
-		# If there is, postpend it to the name and create compare function
-		if len(_tmp)>1:
-			self.property_name_to_test = _tmp[1]
-			self.name += ".%s"%self.property_name_to_test
-			if description.has_key("epsilon"):
-				self.compare_function =\
-				   lambda x,y: getattr(x,self.property_name_to_test)>=y-description["epsilon"]\
-				                 and getattr(x,self.property_name_to_test)<=y+description["epsilon"]
-			else:
-				self.compare_function =\
-				   lambda x,y: getattr(x,self.property_name_to_test)==y
+		self.comparators = [createComparator(x) for x in comparison_rules]
+
+		def value_compare(x,y):
+			for comparator in self.comparators:
+				if not comparator(x,y):
+					return False
+			return True
+		self.value_match = value_compare
 
 		# Get annotation location property
 		self.annot_location = description.get("location", "None")
+		if self.annot_location == "None":
+			self.location_match = lambda x,y: True
 
 def compare(annotations, outputs, output_desc):
 	annotations = copy.deepcopy(annotations)
 	res = [0,0,0,0]
 
-	if output_desc.annot_location == "None":
-		location_match = lambda x,y: True
-
-	if output_desc.property_name_to_test is None:
-		value_match = lambda x,y: True
-	else:
-		value_match = output_desc.compare_function
-
 	for output in outputs:
 		for i in range(len(annotations)):
 			annot = annotations[i]
-			if location_match(annot[1], output) and value_match(annot[0], output):
+			if output_desc.location_match(annot[1], output)\
+			   and output_desc.value_match(annot[0], output):
 				res[0] += 1
 				break
 		else:
@@ -95,8 +165,7 @@ def parseOutputDescription(outputs_description):
 			# This output does not need to be evaluated
 			res.append(None)
 		else:
-			res.append(OutputDescription(graph_output))
-
+			res.append(OutputDescription(graph_output, graph_output.get("compare", [["","",""]])))
 	return res
 
 def validateInputSets(input_datasets, inputs_description, outputs_description):

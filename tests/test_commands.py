@@ -109,7 +109,7 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
       ],
       {
         "_free_files_":{
-          "pt.out":dict(
+          "pt.out(Face)":dict(
             jdoe=[
               dict(fdr=(1,2), sensitivity=(1,1)),
               dict(fdr=(0,1), sensitivity=(1,1))
@@ -119,7 +119,7 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
              dict(fdr=(0,1), sensitivity=(1,1)),
             ]
           ),
-          "pt.out.age":dict(
+          "pt.out(Face&Face.age)":dict(
             jdoe=[
               dict(fdr=(1,2), sensitivity=(1,1)),
               dict(fdr=(0,1), sensitivity=(1,1))
@@ -129,7 +129,7 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
               dict(fdr=(0,1), sensitivity=(1,1)),
             ]
           ),
-          "count.count":dict(
+          "count.count(Face)":dict(
             jdoe=[
               dict(fdr=(0,1), sensitivity=(1,1)),
               dict(fdr=(0,1), sensitivity=(1,1))
@@ -139,7 +139,7 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
               dict(fdr=(0,1), sensitivity=(1,1))
             ]
           ),
-          "pt2.out":dict()
+          "pt2.out(Person)":dict()
         }
       }
     ),
@@ -151,10 +151,10 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
       ],
       {
         "tests/data/gjacob_qidataset":{
-          "pt.out":dict(),
-          "pt.out.age":dict(),
-          "count.count":dict(),
-          "pt2.out":dict(
+          "pt.out(Face)":dict(),
+          "pt.out(Face&Face.age)":dict(),
+          "count.count(Face)":dict(),
+          "pt2.out(Person)":dict(
               sambrose=[
                 dict(fdr=(152,182), sensitivity=(30,30)),
                 dict(fdr=(61,91), sensitivity=(30,30))
@@ -171,25 +171,25 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
       ],
       {
         "tests/data/gjacob_qidataset":{
-          "pt.out":dict(
+          "pt.out(Person)":dict(
             sambrose=[
               dict(fdr=(302,362), sensitivity=(60,60)),
               dict(fdr=(121,181), sensitivity=(60,60))
             ]
           ),
-          "pt.out.name":dict(
+          "pt.out(Person&Person.name)":dict(
             sambrose=[
               dict(fdr=(362,362), sensitivity=(0,60)),
               dict(fdr=(181,181), sensitivity=(0,60))
             ]
           ),
-          "count.count":dict(
+          "count.count(Person)":dict(
             sambrose=[
               dict(fdr=(121,181), sensitivity=(60,60)),
               dict(fdr=(121,181), sensitivity=(60,60))
             ]
           ),
-          "pt2.out":dict(
+          "pt2.out(Person)":dict(
             sambrose=[
               dict(fdr=(302,362), sensitivity=(60,60)),
               dict(fdr=(121,181), sensitivity=(60,60))
