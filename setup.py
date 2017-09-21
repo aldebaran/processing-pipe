@@ -26,7 +26,7 @@ except ImportError:
 package_list = find_packages(where=os.path.join(CONTAINING_DIRECTORY))
 
 setup(
-    name = "processing-pipe",
+    name = "processing_pipe",
     version = __version__,
     description = ("Benchmark tool in Python and C++"),
     classifiers = [
