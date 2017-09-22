@@ -13,6 +13,7 @@ import argparse
 import qidata
 from qidata import QiDataSet, isDataset, DataType
 from ecto_opencv import highgui
+from ecto_qidata import qidata_image
 
 # Local modules
 from processing_pipe.graph import Graph
@@ -276,7 +277,7 @@ def initEvaluationGraph(graph_description):
 	input_provider_index = 0
 	for graph_input in graph_description["inputs"]:
 
-		if graph_input["qidata_type"] in ["IMAGE", "IMAGE_2D", "IMAGE_3D", "IMAGE_STEREO"]:
+		if graph_input["qidata_type"].startswith("IMAGE"):
 			# Add image opening cell
 			graph.addCell(
 				highgui.imread(
@@ -291,6 +292,23 @@ def initEvaluationGraph(graph_description):
 				graph_input["cell_id"],
 				graph_input["port_name"]
 			)
+
+		elif graph_input["qidata_type"].startswith("CAMERA"):
+			# Add image opening cell
+			graph.addCell(
+				qidata_image.imread(
+					"input_provider_%d"%input_provider_index,
+					mode=graph_input.get("mode", "UNCHANGED")
+				)
+			)
+
+			graph.connect(
+				"input_provider_%d"%input_provider_index,
+				"qidata_image",
+				graph_input["cell_id"],
+				graph_input["port_name"]
+			)
+			graph_input["qidata_type"] = graph_input["qidata_type"].replace("CAMERA","IMAGE")
 		else:
 			raise Exception("Input datatype %s is not yet supported"%graph_input["qidata_type"])
 
@@ -552,6 +570,9 @@ def evalAlgorithm(args):
 	# Retrieve outputs to evaluate
 	outputs_description = parseOutputDescription(graph_description["outputs"])
 
+	# Create graph based on JSON and adapt it to evaluation
+	graph = initEvaluationGraph(graph_description)
+
 	# Filter out datasets that can't be used for evaluation
 	valid_input_datasets = validateInputSets(input_datasets,
 	                                         graph_description["inputs"],
@@ -566,9 +587,6 @@ def evalAlgorithm(args):
 		raise Exception(
 		    "None of the given data can be used to evaluate the given graph"
 		)
-
-	# Create graph based on JSON and adapt it to evaluation
-	graph = initEvaluationGraph(graph_description)
 
 	# Run the graph
 	for input_dataset in valid_input_datasets:
