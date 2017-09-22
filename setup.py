@@ -45,8 +45,8 @@ setup(
     author_email = 'sambrose@softbankrobotics.com',
     packages = package_list,
     install_requires = [
-        "python-ecto >= 1.0.1",
-        "qidata >= 1.0.0a10"
+        "python-ecto >= 1.1.4",
+        "qidata >= 1.0.0"
     ],
     package_data={"processing_pipe":["VERSION"]},
     entry_points={
