@@ -44,5 +44,5 @@ def createEctoCell(module, cell_type, name, params=list()):
 			v = param["values"][0]
 			if isinstance(v, unicode):
 				v = str(v)
-			init_params[param["param_name"]] = v
+			init_params[str(param["param_name"])] = v
 	return cell_builder(str(name),**init_params)
