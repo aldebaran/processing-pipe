@@ -37,6 +37,39 @@
 		},
 		{
 			"module":"ecto.cells",
+			"cell_type":"Constant",
+			"name":"fake_pp_with_loc1",
+			"params":[
+				{
+					"param_name":"value",
+					"values":[[[530, 240]]]
+				}
+			]
+		},
+		{
+			"module":"ecto.cells",
+			"cell_type":"Constant",
+			"name":"fake_pp_with_loc2",
+			"params":[
+				{
+					"param_name":"value",
+					"values":[[{"roi":[[0,0],[640,480]]}]]
+				}
+			]
+		},
+		{
+			"module":"ecto.cells",
+			"cell_type":"Constant",
+			"name":"fake_pp_with_loc3",
+			"params":[
+				{
+					"param_name":"value",
+					"values":[[{"faceInfo":{"roi":[[420,50],[640,420]]}}]]
+				}
+			]
+		},
+		{
+			"module":"ecto.cells",
 			"cell_type":"Passthrough",
 			"name":"pt"
 		},
@@ -44,6 +77,21 @@
 			"module":"ecto.cells",
 			"cell_type":"Passthrough",
 			"name":"pt2"
+		},
+		{
+			"module":"ecto.cells",
+			"cell_type":"Passthrough",
+			"name":"pt3"
+		},
+		{
+			"module":"ecto.cells",
+			"cell_type":"Passthrough",
+			"name":"pt4"
+		},
+		{
+			"module":"ecto.cells",
+			"cell_type":"Passthrough",
+			"name":"pt5"
 		}
 	],
 	"connections":[
@@ -54,6 +102,18 @@
 		{
 			"from":"const.out",
 			"to":"pt2.in"
+		},
+		{
+			"from":"fake_pp_with_loc1.out",
+			"to":"pt3.in"
+		},
+		{
+			"from":"fake_pp_with_loc2.out",
+			"to":"pt4.in"
+		},
+		{
+			"from":"fake_pp_with_loc3.out",
+			"to":"pt5.in"
 		}
 	],
 	"outputs":[
@@ -84,6 +144,24 @@
 			"cell_id":"pt2",
 			"port_name":"out",
 			"qidata_type":"<Person>"
+		},
+		{
+			"cell_id":"pt3",
+			"port_name":"out",
+			"qidata_type":"<Person>",
+			"location":""
+		},
+		{
+			"cell_id":"pt4",
+			"port_name":"out",
+			"qidata_type":"<Person>",
+			"location":"key:roi"
+		},
+		{
+			"cell_id":"pt5",
+			"port_name":"out",
+			"qidata_type":"<Person>",
+			"location":"key:faceInfo,key:roi"
 		}
 	]
 }

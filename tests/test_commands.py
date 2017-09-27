@@ -194,6 +194,25 @@ def test_eval_command_fail(command_args, expected, eval_command_parser):
               dict(fdr=(302,362), sensitivity=(60,60)),
               dict(fdr=(121,181), sensitivity=(60,60))
             ]
+          ),
+          "pt3.out(Person)":dict(
+            sambrose=[
+              dict(fdr=(151,181), sensitivity=(30,60)),
+              dict(fdr=(151,181), sensitivity=(30,60))
+            ]
+          ),
+          "pt4.out(Person)":dict(
+            sambrose=[
+              dict(fdr=(181,181), sensitivity=(0,60)),
+              dict(fdr=(181,181), sensitivity=(0,60))
+            ]
+          )
+          ,
+          "pt5.out(Person)":dict(
+            sambrose=[
+              dict(fdr=(152,181), sensitivity=(29,60)),
+              dict(fdr=(152,181), sensitivity=(29,60))
+            ]
           )
         }
       }

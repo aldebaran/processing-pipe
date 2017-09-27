@@ -21,7 +21,7 @@ from processing_pipe.utils import loadJSONFile
 
 DESCRIPTION = "Evaluate a given processing graph"
 
-def createComparator(comparison_rule):
+def createValueComparator(comparison_rule):
 	# Create comparator
 	if "" == comparison_rule[0]:
 		default_comparison = "True"
@@ -82,6 +82,92 @@ def createComparator(comparison_rule):
 	else:
 		raise Exception("Unsupported comparison mode %s"%comparison_type)
 
+def createLocationComparator(annot_location):
+	# Create comparator
+	if "None" == annot_location:
+		def loc_compare(x,y):return True
+	else:
+		if "" == annot_location:
+			def get_output_location(x):
+				return x
+		else:
+			functions = []
+			def get_output_location(x):
+				for location_address in annot_location.split(","):
+					location_prop_type, location_prop_name=location_address.split(":")
+					if "attr" == location_prop_type:
+						x = getattr(x,location_prop_name)
+					elif "key" == location_prop_type:
+						x = x[location_prop_name]
+					elif "item" == location_prop_type:
+						x = x[int(location_prop_name)]
+					else:
+						raise RuntimeError("Invalid location value: %s"%location_address)
+				return x
+
+		def loc_compare(x,y):
+			if x is None:
+				return True
+			output_location = get_output_location(y)
+
+			# Annotation is a bounding box defined by the two extremal points
+			bbox_dimension = len(x[0])
+
+			# Output must be a list representing a point or a bounding box
+			if len(output_location) != 2:
+				# output location is a point
+				out_loc_is_point = True
+				out_loc_dimension = len(output_location)
+			else:
+				if isinstance(output_location[0], list):
+					# output location is roi
+					out_loc_is_point = False
+					out_loc_dimension = len(output_location[0])
+				else:
+					# output location is a 2D point
+					out_loc_is_point = True
+					out_loc_dimension = 2
+
+			if out_loc_dimension == bbox_dimension:
+				# Output location has the same dimension as annotation location
+				pass
+			else:
+				# TODO: projection needed
+				# Return false for now
+				return False
+
+			if out_loc_is_point:
+				# Output location is a point, make sure it is included in the
+				# annotation box
+				for i in range(bbox_dimension):
+					if output_location[i] < x[0][i]\
+					   or output_location[i] > x[1][i]:
+						return False
+			else:
+				# Output location is a roi
+				intersection_box = [None]*bbox_dimension
+				common_hyper_volume = 1
+				annot_hyper_volume = 1
+				out_hyper_volume = 1
+				for i in range(bbox_dimension):
+					if output_location[1][i] < x[0][i]\
+					   or x[1][i] < output_location[0][i]:
+						# No intersection between locations
+						return False
+
+					common_hyper_volume *= (
+					    min(x[1][i], output_location[1][i])\
+					    - max(x[0][i], output_location[0][i])
+					)
+					annot_hyper_volume *= (x[1][i]-x[0][i])
+					out_hyper_volume *= (output_location[1][i]-output_location[0][i])
+				return common_hyper_volume == out_hyper_volume\
+				       or (2*common_hyper_volume>annot_hyper_volume\
+				           and 2*common_hyper_volume>out_hyper_volume)
+			return True
+
+	return loc_compare
+
 def specifyName(basetype, comparison_rule):
 	if "" == comparison_rule[0]:
 		return ""
@@ -125,7 +211,7 @@ class OutputDescription:
 		# Get output type
 		self.metadata_type = description["qidata_type"]
 
-		self.comparators = [createComparator(x) for x in comparison_rules]
+		self.comparators = [createValueComparator(x) for x in comparison_rules]
 
 		def value_compare(x,y):
 			for comparator in self.comparators:
@@ -135,9 +221,7 @@ class OutputDescription:
 		self.value_match = value_compare
 
 		# Get annotation location property
-		self.annot_location = description.get("location", "None")
-		if self.annot_location == "None":
-			self.location_match = lambda x,y: True
+		self.location_match = createLocationComparator(description.get("location", "None"))
 
 def compare(annotations, outputs, output_desc):
 	annotations = copy.deepcopy(annotations)
