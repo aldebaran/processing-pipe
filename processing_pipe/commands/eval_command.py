@@ -13,6 +13,7 @@ import argparse
 import qidata
 from qidata import QiDataSet, isDataset, DataType
 from ecto_opencv import highgui
+from ecto_opencv import cv_bp # is not used directly, but import cv python bindings
 from ecto_qidata import qidata_image
 
 # Local modules
@@ -113,8 +114,18 @@ def createLocationComparator(annot_location):
 			# Annotation is a bounding box defined by the two extremal points
 			bbox_dimension = len(x[0])
 
-			# Output must be a list representing a point or a bounding box
-			if len(output_location) != 2:
+			if isinstance(output_location, cv_bp.Rect):
+				# If location is a cv::Rect, convert it to a list
+				output_location = [
+				  [output_location.tl().x, output_location.tl().y],
+				  [output_location.br().x, output_location.br().y]
+				]
+				out_loc_is_point = False
+				out_loc_dimension = len(output_location[0])
+
+			# From here on, output must be a list representing a point or a
+			# bounding box
+			elif len(output_location) != 2:
 				# output location is a point
 				out_loc_is_point = True
 				out_loc_dimension = len(output_location)
