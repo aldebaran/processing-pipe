@@ -372,7 +372,24 @@ def initEvaluationGraph(graph_description):
 	input_provider_index = 0
 	for graph_input in graph_description["inputs"]:
 
-		if graph_input["qidata_type"].startswith("IMAGE"):
+		if graph_input["qidata_type"] in ["CAMERA_STEREO", "IMAGE_STEREO"]:
+			# Add image opening cell
+			graph.addCell(
+				qidata_image.imread_stereo(
+					"input_provider_%d"%input_provider_index,
+					mode=graph_input.get("mode", "UNCHANGED")
+				)
+			)
+
+			graph.connect(
+				"input_provider_%d"%input_provider_index,
+				"qidata_stereo_image",
+				graph_input["cell_id"],
+				graph_input["port_name"]
+			)
+			graph_input["qidata_type"] = graph_input["qidata_type"].replace("CAMERA","IMAGE")
+
+		elif graph_input["qidata_type"].startswith("IMAGE"):
 			# Add image opening cell
 			graph.addCell(
 				highgui.imread(
