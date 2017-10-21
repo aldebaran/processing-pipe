@@ -1,0 +1,217 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Basic usage &#8212; Processing pipe 1.0.0a0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0a0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Processing pipe’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="basic-usage">
+<h1>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="create-your-first-graph">
+<h2>Create your first graph<a class="headerlink" href="#create-your-first-graph" title="Permalink to this headline">¶</a></h2>
+<p>In the most basic version, a graph is a set of ecto cells connected to each
+other. In the described graph, sources and sinks must be included, as none will
+be added by processing pipe.</p>
+<p>At first, your graph is simply a JSON file containing two items:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="n">cells</span><span class="p">:[],</span>
+        <span class="n">connections</span><span class="p">:[]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As you would guess, <code class="docutils literal"><span class="pre">cells</span></code> contains the list of your cells, and
+<code class="docutils literal"><span class="pre">connections</span></code>, the list of connections between your cells.</p>
+<p>The description of a cell looks like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;MY_CELL_NAME&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="s2">&quot;my_cells&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cell_type&quot;</span><span class="p">:</span> <span class="s2">&quot;cell_class_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;param_name&quot;</span><span class="p">:</span><span class="s2">&quot;cell_param&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">]</span>
+                <span class="p">}</span>
+        <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Let’s explain this in details:</p>
+<dl class="docutils">
+<dt>name</dt>
+<dd>In Ecto framework, every cell must have a unique name. So here, you define
+your cell’s name. It can be anything, as long as it is unique.</dd>
+<dt>module</dt>
+<dd>The python module in which your cell is defined.</dd>
+<dt>cell_type</dt>
+<dd>The name of the class representing your cell</dd>
+<dt>params</dt>
+<dd>Contains the parameters to give to your cell.</dd>
+</dl>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><code class="docutils literal"><span class="pre">values</span></code> always expects a list of values. This way, you can easilly run
+your graph with different settings (more on that later). If you only need to
+set your parameter to a single value, just put a one-element list.</p>
+</div>
+<p>In order to run a graph, you need to have at least two cells. Let’s image we
+defined two cells called <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">b</span></code>, both with an <code class="docutils literal"><span class="pre">input</span></code> and an
+<code class="docutils literal"><span class="pre">output</span></code> port. Then the connections between those two cells can be described
+like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;connections&quot;</span><span class="p">:[</span>
+        <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span><span class="s2">&quot;a.output&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span><span class="s2">&quot;b.input&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>And that’s it.</p>
+<p>To finish this section, here is a more complete example of a graph:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;cells&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;opening&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="s2">&quot;ecto_opencv.highgui&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;cell_type&quot;</span><span class="p">:</span> <span class="s2">&quot;imread&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                        <span class="s2">&quot;param_name&quot;</span><span class="p">:</span><span class="s2">&quot;image_file&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;cat.jpg&quot;</span><span class="p">]</span>
+                                <span class="p">}</span>
+                        <span class="p">]</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;cvt&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="s2">&quot;ecto_opencv.imgproc&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;cell_type&quot;</span><span class="p">:</span> <span class="s2">&quot;cvtColor&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                        <span class="s2">&quot;param_name&quot;</span><span class="p">:</span><span class="s2">&quot;flag&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                                <span class="s2">&quot;ecto_opencv.imgproc.BGR2GRAY&quot;</span><span class="p">,</span>
+                                                <span class="s2">&quot;ecto_opencv.imgproc.BGR2RGB&quot;</span><span class="p">,</span>
+                                                <span class="s2">&quot;ecto_opencv.imgproc.RGB2GRAY&quot;</span>
+                                        <span class="p">]</span>
+                                <span class="p">}</span>
+                        <span class="p">]</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;save&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="s2">&quot;ecto_opencv.highgui&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;cell_type&quot;</span><span class="p">:</span> <span class="s2">&quot;ImageSaver&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                        <span class="s2">&quot;param_name&quot;</span><span class="p">:</span><span class="s2">&quot;filename_format&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;cat</span><span class="si">%d</span><span class="s2">.jpg&quot;</span><span class="p">]</span>
+                                <span class="p">}</span>
+                        <span class="p">]</span>
+                <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;connections&quot;</span><span class="p">:[</span>
+                <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span><span class="s2">&quot;opening.image&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span><span class="s2">&quot;cvt.image&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span><span class="s2">&quot;cvt.image&quot;</span><span class="p">,</span><span class="s2">&quot;to&quot;</span><span class="p">:</span><span class="s2">&quot;save.image&quot;</span><span class="p">}</span>
+        <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This graph will create three cells imported from the <code class="docutils literal"><span class="pre">ecto_opencv.highgui</span></code>
+package and connect them together. The first cell opens an image called
+<code class="docutils literal"><span class="pre">cat.jpg</span></code>, the second cell performs three different color conversions on that
+image and the last cell saves the resulting images under <code class="docutils literal"><span class="pre">cat0.jpg</span></code>,
+<code class="docutils literal"><span class="pre">cat1.jpg</span></code> and <code class="docutils literal"><span class="pre">cat2.jpg</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Processing pipe</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-your-first-graph">Create your first graph</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Processing pipe’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Surya Ambrose.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/basic.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
